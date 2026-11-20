@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 
-// Team password for the Hub (HTTP Basic auth: any username, password = HUB_PASSWORD).
-// Fails closed on Vercel: with no password set, the hosted Hub refuses everyone.
-// Locally, with no password set, it stays open for development.
+// Optional team password for the Hub (HTTP Basic auth: any username, password = HUB_PASSWORD).
+// With no password set the Hub is open to anyone with the URL. That is acceptable only
+// while it holds sample data.
 //
 // Left public on purpose: advertiser report links and the ad delivery/counting
 // routes, which the websites, the app and advertisers reach without a login.
@@ -18,12 +18,10 @@ function same(a: string, b: string) {
 export function proxy(req: NextRequest) {
   if (PUBLIC.some((r) => r.test(req.nextUrl.pathname))) return NextResponse.next();
 
+  // Optional by decision (2026-11-21): the demo deploy runs open, with sample data only.
+  // Set HUB_PASSWORD before any real advertiser data goes in.
   const password = process.env.HUB_PASSWORD;
-  if (!password) {
-    return process.env.VERCEL
-      ? new NextResponse("Hub locked: set HUB_PASSWORD in the Vercel project settings, then redeploy.", { status: 503 })
-      : NextResponse.next();
-  }
+  if (!password) return NextResponse.next();
 
   const header = req.headers.get("authorization") ?? "";
   if (header.startsWith("Basic ")) {
