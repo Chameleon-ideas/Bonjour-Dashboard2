@@ -4,11 +4,14 @@ import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { seed } from "./seed";
 
-// Local prototype storage: one SQLite file under ./data (gitignored).
+// Prototype storage: one SQLite file under ./data locally (gitignored), /tmp on Vercel.
 // The real Hub would swap this module for a hosted database; nothing else
 // imports node:sqlite directly.
 
-export const DATA_DIR = path.join(process.cwd(), "data");
+// On Vercel the deployment is read-only; /tmp is the only writable place. It is
+// per-instance and wiped on cold start, so a hosted deploy is a demo: sample data
+// re-seeds itself and edits do not last. A real deploy needs a hosted database.
+export const DATA_DIR = process.env.VERCEL ? "/tmp/hub" : path.join(process.cwd(), "data");
 export const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 const DB_PATH = path.join(DATA_DIR, "hub.db");
 
