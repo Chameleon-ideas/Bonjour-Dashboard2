@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* Neutrals and brand ground match the Bonjour Ontario app (lib/theme/alto_tokens.dart). */
+@theme {
+  --color-paper: #fcfbf8;
+  --color-desk: #e7e4dd;
+  --color-panel: #f3f0e9;
+  --color-brand: #1e3a2e;
+  --color-brand-2: #00683d;
+  --color-leaf: #4f9e3f;
+  --color-ink: #14130f;
+  --color-secondary: #57544c;
+  --color-faint: #9a968c;
+  --color-rule: #eae6dd;
+  --color-divider: #e2ddd2;
+  --color-chip: #ded9cd;
+  --color-good: #00683d;
+  --color-warn: #b3261e;
+  --color-warn-tint: #fbeced;
+  --color-ok-tint: #eef6ec;
+
+}
+
+/* inline: utilities reference the next/font variables directly, which are set on <body>, not :root. */
+@theme inline {
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-display: var(--font-caslon), Georgia, serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-desk);
+  color: var(--color-ink);
+  font-family: var(--font-archivo), system-ui, sans-serif;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-page {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
